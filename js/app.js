@@ -4,7 +4,7 @@
 let cardSymbols = ["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube",
     "fa-leaf", "fa-bicycle", "fa-bomb", "fa-diamond", "fa-paper-plane-o",
     "fa-anchor", "fa-bolt", "fa-cube", "fa-leaf", "fa-bicycle", "fa-bomb"];
-
+    
 cardSymbols = shuffle(cardSymbols);
 /*
  * Display the cards on the page
@@ -12,6 +12,26 @@ cardSymbols = shuffle(cardSymbols);
  *   - loop through each card and create its HTML
  *   - add each card's HTML to the page
  */
+
+function displayCards() {
+    const frag = document.createDocumentFragment();
+
+    const cardsContainer = document.querySelector(".deck");
+
+    for (let i = 0; i < cardSymbols.length; i++) {
+        let cardItem = document.createElement("li");
+        cardItem.classList.add("card");
+
+        let cardContent = document.createElement("li");
+        cardContent.classList.add("fa");
+        cardContent.classList.add(cardSymbols[i]);
+
+        cardItem.appendChild(cardContent);
+        frag.appendChild(cardItem);
+    }
+
+    cardsContainer.appendChild(frag);
+}
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -27,6 +47,8 @@ function shuffle(array) {
 
     return array;
 }
+
+displayCards();
 
 /*
  * set up the event listener for a card. If a card is clicked:
