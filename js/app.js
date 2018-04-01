@@ -91,10 +91,6 @@ function checkSymbols() {
                 starsItems[1].setAttribute('class', 'fa fa-star-o');
                 starsRate--;
                 break;
-            case 18:
-                starsItems[0].setAttribute('class', 'fa fa-star-o');
-                starsRate--;
-                break;
         }
 
         // prevent other cards to be clickable
