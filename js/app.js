@@ -1,25 +1,34 @@
-/*
- * Create a list that holds all of your cards
- */
 let openedCards = [];
 let matchedCards = 0;
+const moves = document.querySelector('.moves');
+let movesCount = 0;
+let starsRate = 3;
+let gameStarted = false;
+let seconds = 0, minutes = 0, hours = 0;
+const timeEl = document.querySelector('.time');
 
+/*
+ * A list that holds all of your cards.
+ */
 let cardSymbols = ["fa-diamond", "fa-paper-plane-o", "fa-anchor", "fa-bolt", "fa-cube",
     "fa-leaf", "fa-bicycle", "fa-bomb", "fa-diamond", "fa-paper-plane-o",
     "fa-anchor", "fa-bolt", "fa-cube", "fa-leaf", "fa-bicycle", "fa-bomb"];
 
-cardSymbols = shuffle(cardSymbols);
+displayNewCards();
+resetResults();
+
 /*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
+ * Shuffle the cards and creat the game board.
+*/
 
-function displayCards() {
-    const frag = document.createDocumentFragment();
+function displayNewCards() {
 
-    const cardsContainer = document.querySelector(".deck");
+    cardSymbols = shuffle(cardSymbols);
+
+    let entireContainer = document.querySelector('.container');
+
+    const cardsContainer = document.createElement("ul");
+    cardsContainer.classList.add('deck');
 
     for (let i = 0; i < cardSymbols.length; i++) {
         let cardItem = document.createElement("li");
@@ -31,13 +40,13 @@ function displayCards() {
         cardContent.classList.add(cardSymbols[i]);
 
         cardItem.appendChild(cardContent);
-        frag.appendChild(cardItem);
+        cardsContainer.appendChild(cardItem);
     }
 
-    cardsContainer.appendChild(frag);
+    entireContainer.appendChild(cardsContainer);
+    document.querySelector(".deck").addEventListener('click', cardClick)
 }
 
-// Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -52,6 +61,7 @@ function shuffle(array) {
     return array;
 }
 
+
 function showSymbol(openedCard) {
     openedCard.setAttribute('class', 'card open');
     openedCards.push(openedCard);
@@ -63,21 +73,48 @@ function setOpenedCardsClasses(classes) {
     });
 }
 
+
+// Apply the changes to the game board (Moves, Rate, Cards) while comparing the cards
 function checkSymbols() {
     if (openedCards.length === 2) {
 
+        let starsItems = document.querySelectorAll(".stars .fa");
+        moves.textContent = ++movesCount + ' Moves';
+
+        // Set the rate based on the moves count.
+        switch (movesCount) {
+            case 6:
+                starsItems[2].setAttribute('class', 'fa fa-star-o');
+                starsRate--;
+                break;
+            case 12:
+                starsItems[1].setAttribute('class', 'fa fa-star-o');
+                starsRate--;
+                break;
+            case 18:
+                starsItems[0].setAttribute('class', 'fa fa-star-o');
+                starsRate--;
+                break;
+        }
+
+        // prevent other cards to be clickable
         document.querySelector(".deck").removeEventListener('click', cardClick)
         setTimeout(function () {
             openedCards = [];
             document.querySelector(".deck").addEventListener('click', cardClick)
         }, 700);
 
+        // Compare the symbols and apply the result
         if (openedCards[0].firstChild.classList[1] === openedCards[1].firstChild.classList[1]) {
             setOpenedCardsClasses('card match');
 
             matchedCards++;
             if (matchedCards === cardSymbols.length / 2) {
-                // Completed
+                document.querySelector(".result").classList.toggle('show');
+                document.querySelector(".rate-result").textContent = starsRate;
+                document.querySelector(".time-result").textContent = timeEl.textContent;
+                document.querySelector(".moves-result").textContent = movesCount;
+                gameStarted = false;
             }
 
         } else {
@@ -89,23 +126,50 @@ function checkSymbols() {
     }
 }
 
-displayCards();
-
-/*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
- */
-document.querySelector(".deck").addEventListener('click', cardClick)
-
 function cardClick(e) {
     if (e.target.classList.contains('card') && !e.target.classList.contains('match') && !e.target.classList.contains('open')) {
+        gameStarted = true;
         showSymbol(e.target);
         checkSymbols();
     }
+}
+
+// Timer
+function addTime() {
+    seconds++;
+    if (seconds >= 60) {
+        seconds = 0;
+        minutes++;
+        if (minutes >= 60) {
+            minutes = 0;
+            hours++;
+        }
+    }
+}
+
+setInterval(function () {
+    if (gameStarted) {
+        addTime()
+        timeEl.textContent = (hours ? (hours > 9 ? hours : "0" + hours) : "00") + ":" + (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+    }
+}, 1000);
+
+document.querySelector('.restart').addEventListener('click', function () {
+    resetResults();
+    document.querySelector(".deck").remove();
+    displayNewCards();
+
+    Array.from(document.querySelectorAll(".stars .fa")).forEach(function (c) {
+        c.setAttribute('class', 'fa fa-star');
+    });
+
+});
+
+function resetResults() {
+    gameStarted = false;
+    seconds = 0, minutes = 0, hours = 0;
+    movesCount = 0;
+    timeEl.textContent = '00:00:00'
+    moves.textContent = '0 Moves';
+    starsRate = 3;
 }

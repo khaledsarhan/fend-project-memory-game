@@ -53,7 +53,7 @@ h1 {
 
 .deck .card {
     height: 125px;
-    width: 125px;
+    width: 22%;
     font-size: 0;
     color: #ffffff;
     border-radius: 8px;
@@ -134,4 +134,64 @@ h1 {
 .score-panel .restart {
     float: right;
     cursor: pointer;
+}
+
+/*Result Popup*/
+ 
+.result {
+    background-image: url('../img/firework-display.jpg');
+    background-size: cover;
+    opacity: 0.9;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+.result-content {
+    background: linear-gradient(160deg, #02ccba 0%, #aa7ecd 100%);
+    padding: 32px;
+    border-radius: 10px;
+    box-shadow: 12px 15px 20px 0 rgba(46, 61, 73, 0.5);
+    text-align: center;
+    margin: auto;
+    width: 40%;
+    position: relative;
+    top: 15%;
+}
+
+.show {
+    display: block;
+}
+
+.button {
+    background-color: rgb(241, 11, 153);
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.result-content p strong {
+    margin-right: 20px;
+}
+
+.time {
+    margin-left: 50px;
+}
+
+@media screen and (max-width: 675px) {
+    .deck {
+        width: 100%;
+    }
 }
