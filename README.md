@@ -3,7 +3,7 @@
 ## Table of Contents
 
 * [Instructions](#instructions)
-* [How to play](#How to play)
+* [How to play](#How_to_play)
 * [Dependencies](#Dependencies)
 
 ## Instructions
