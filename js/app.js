@@ -172,4 +172,5 @@ function resetResults() {
     timeEl.textContent = '00:00:00'
     moves.textContent = '0 Moves';
     starsRate = 3;
+    openedCards = [];
 }
