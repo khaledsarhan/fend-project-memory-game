@@ -18,7 +18,7 @@ displayNewCards();
 resetResults();
 
 /*
- * Shuffle the cards and creat the game board.
+ * Shuffle the cards and create the game board.
 */
 
 function displayNewCards() {
@@ -47,6 +47,9 @@ function displayNewCards() {
     document.querySelector(".deck").addEventListener('click', cardClick)
 }
 
+/*
+ * Shuffle the giving array items.
+*/
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -62,11 +65,18 @@ function shuffle(array) {
 }
 
 
+/*
+ * Open the giving card and add it the list.
+*/
 function showSymbol(openedCard) {
     openedCard.setAttribute('class', 'card open');
     openedCards.push(openedCard);
 }
 
+
+/*
+ * Set giving classes to the opened cards.
+*/
 function setOpenedCardsClasses(classes) {
     openedCards.forEach(function (card) {
         card.setAttribute('class', classes);
@@ -74,7 +84,9 @@ function setOpenedCardsClasses(classes) {
 }
 
 
-// Apply the changes to the game board (Moves, Rate, Cards) while comparing the cards
+/*
+ * Apply the changes to the game board (Moves, Rate, Cards) while comparing the cards.
+*/
 function checkSymbols() {
     if (openedCards.length === 2) {
 
@@ -122,6 +134,9 @@ function checkSymbols() {
     }
 }
 
+/*
+ * Listen to the card click event to open it and compare it with the other card.
+*/
 function cardClick(e) {
     if (e.target.classList.contains('card') && !e.target.classList.contains('match') && !e.target.classList.contains('open')) {
         gameStarted = true;
@@ -142,7 +157,7 @@ function addTime() {
         }
     }
 }
-
+// Timer
 setInterval(function () {
     if (gameStarted) {
         addTime()
@@ -161,6 +176,9 @@ document.querySelector('.restart').addEventListener('click', function () {
 
 });
 
+/*
+ * Reset the game values to its default.
+*/
 function resetResults() {
     gameStarted = false;
     seconds = 0, minutes = 0, hours = 0;
